@@ -3,7 +3,13 @@ from typing import Any, Callable, Literal
 
 import polars as pl
 
-from .._types import DEComparison, MetricBestValue, MetricType, PerturbationAnndataPair
+from .._types import (
+    CombinedMetricData,
+    DEComparison,
+    MetricBestValue,
+    MetricType,
+    PerturbationAnndataPair,
+)
 from ..metrics import MetricResult, metrics_registry
 
 logger = logging.getLogger(__name__)
@@ -63,6 +69,7 @@ class MetricPipeline:
                 self._metrics.extend(
                     metrics_registry.list_metrics(MetricType.ANNDATA_PAIR)
                 )
+                self._metrics.extend(metrics_registry.list_metrics(MetricType.COMBINED))
             case "de":
                 self._metrics.extend(metrics_registry.list_metrics(MetricType.DE))
             case "anndata":
@@ -107,7 +114,8 @@ class MetricPipeline:
         metric_type: MetricType,
         description: str,
         func: Callable[
-            [PerturbationAnndataPair | DEComparison], float | dict[str, float]
+            [PerturbationAnndataPair | DEComparison | CombinedMetricData],
+            float | dict[str, float],
         ],
         best_value: MetricBestValue,
         is_class: bool = False,
@@ -155,7 +163,7 @@ class MetricPipeline:
     def _compute_metric(
         self,
         name: str,
-        data: DEComparison | PerturbationAnndataPair,
+        data: DEComparison | PerturbationAnndataPair | CombinedMetricData,
     ):
         """Compute a specific metric."""
         try:
@@ -218,6 +226,19 @@ class MetricPipeline:
             if name not in metrics_registry.list_metrics(MetricType.ANNDATA_PAIR):
                 continue
             self._compute_metric(name, data)
+
+    def compute_combined_metrics(
+        self,
+        anndata_pair: PerturbationAnndataPair,
+        de_comparison: DEComparison | None,
+    ) -> None:
+        """Compute metrics that require both expression and real DE results."""
+        if de_comparison is None:
+            return
+        data = CombinedMetricData(anndata_pair, de_comparison)
+        for name in self._metrics:
+            if name in metrics_registry.list_metrics(MetricType.COMBINED):
+                self._compute_metric(name, data)
 
     def get_results(self) -> pl.DataFrame:
         """Get results as a DataFrame."""

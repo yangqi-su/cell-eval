@@ -15,6 +15,7 @@ class MetricType(enum.Enum):
 
     DE = "de"
     ANNDATA_PAIR = "anndata_pair"
+    COMBINED = "combined"
 
 
 class MetricBestValue(enum.Enum):

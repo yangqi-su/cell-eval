@@ -1,4 +1,5 @@
 from ._anndata import BulkArrays, CellArrays, PerturbationAnndataPair
+from ._combined import CombinedMetricData
 from ._de import DEComparison, DEResults, initialize_de_comparison
 from ._enums import DESortBy, MetricBestValue, MetricType
 
@@ -12,4 +13,5 @@ __all__ = [
     "PerturbationAnndataPair",
     "BulkArrays",
     "CellArrays",
+    "CombinedMetricData",
 ]

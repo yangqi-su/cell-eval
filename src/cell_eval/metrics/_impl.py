@@ -20,6 +20,7 @@ from ._de import (
     de_overlap_metric,
 )
 from ._registry import MetricRegistry
+from ._weighted import weighted_pearson_delta, wmse
 
 metrics_registry = MetricRegistry()
 
@@ -162,4 +163,20 @@ metrics_registry.register(
     best_value=MetricBestValue.ONE,
     func=ClusteringAgreement,  # type: ignore
     is_class=True,
+)
+
+metrics_registry.register(
+    name="wmse",
+    metric_type=MetricType.COMBINED,
+    description="DEG-weighted MSE between predicted and real perturbation pseudobulks",
+    best_value=MetricBestValue.ZERO,
+    func=wmse,
+)
+
+metrics_registry.register(
+    name="weighted_pearson_delta",
+    metric_type=MetricType.COMBINED,
+    description="DEG-weighted Pearson correlation of perturbation-minus-control effects",
+    best_value=MetricBestValue.ONE,
+    func=weighted_pearson_delta,
 )

@@ -20,6 +20,7 @@ from ._de import (
     de_overlap_metric,
 )
 from ._impl import metrics_registry
+from ._weighted import deg_gene_weights, weighted_pearson_delta, wmse
 from .base import Metric, MetricInfo, MetricResult
 
 __all__ = [
@@ -42,6 +43,9 @@ __all__ = [
     "DENsigCounts",
     # Global registry
     "metrics_registry",
+    "deg_gene_weights",
+    "wmse",
+    "weighted_pearson_delta",
     # Base Classes
     "Metric",
     "MetricResult",

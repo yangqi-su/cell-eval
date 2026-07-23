@@ -201,6 +201,7 @@ class MetricsEvaluator:
             pipeline.skip_metrics(skip_metrics)
         pipeline.compute_de_metrics(self.de_comparison)
         pipeline.compute_anndata_metrics(self.anndata_pair)
+        pipeline.compute_combined_metrics(self.anndata_pair, self.de_comparison)
         results = pipeline.get_results()
         agg_results = pipeline.get_agg_results()
 
@@ -291,6 +292,7 @@ class MetricsEvaluator:
             pipeline.skip_metrics(skip_metrics)
         pipeline.compute_de_metrics(ceiling_de)
         pipeline.compute_anndata_metrics(ceiling_pair)
+        pipeline.compute_combined_metrics(ceiling_pair, ceiling_de)
 
         # Spearman-Brown ceiling on the per-context AGGREGATE: average each metric
         # over perturbations, then map that mean from half depth to full depth with

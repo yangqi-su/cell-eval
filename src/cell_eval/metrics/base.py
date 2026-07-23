@@ -1,7 +1,13 @@
 from dataclasses import dataclass
 from typing import Any, Callable, Protocol
 
-from .._types import DEComparison, MetricBestValue, MetricType, PerturbationAnndataPair
+from .._types import (
+    CombinedMetricData,
+    DEComparison,
+    MetricBestValue,
+    MetricType,
+    PerturbationAnndataPair,
+)
 
 
 class Metric(Protocol):
@@ -9,7 +15,7 @@ class Metric(Protocol):
 
     def __call__(
         self,
-        data: PerturbationAnndataPair | DEComparison,
+        data: PerturbationAnndataPair | DEComparison | CombinedMetricData,
         **kwargs,
     ) -> float | dict[str, float]: ...
 

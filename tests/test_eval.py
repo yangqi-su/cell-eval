@@ -209,9 +209,11 @@ def test_eval_simple():
         control_pert="control",
         pert_col="perturbation",
     )
-    evaluator.compute(
+    results, _ = evaluator.compute(
         break_on_error=True,
     )
+    assert "wmse" in results.columns
+    assert "weighted_pearson_delta" in results.columns
 
 
 def test_eval_simple_profiles():
@@ -423,6 +425,8 @@ def test_eval_ceiling():
     assert "pearson_delta" in agg.columns
     cv = agg["pearson_delta"].drop_nulls().to_numpy()
     assert np.all(cv <= 1.0 + 1e-9)
+    assert "wmse" in results.columns
+    assert "weighted_pearson_delta" in results.columns
     assert os.path.exists(f"{OUTDIR}/ceiling_results.csv")
     assert os.path.exists(f"{OUTDIR}/agg_ceiling_results.csv")
     shutil.rmtree(OUTDIR)

@@ -1,6 +1,12 @@
 from typing import Any, Callable, Dict, List, Optional
 
-from .._types import DEComparison, MetricBestValue, MetricType, PerturbationAnndataPair
+from .._types import (
+    CombinedMetricData,
+    DEComparison,
+    MetricBestValue,
+    MetricType,
+    PerturbationAnndataPair,
+)
 from .base import MetricInfo
 
 METRIC_FUNC_ADATA_KWARGS = Callable[
@@ -9,12 +15,14 @@ METRIC_FUNC_ADATA_KWARGS = Callable[
 METRIC_FUNC_ADATA = Callable[[PerturbationAnndataPair], float | dict[str, float]]
 METRIC_FUNC_DE_KWARGS = Callable[[DEComparison, Any], float | dict[str, float]]
 METRIC_FUNC_DE = Callable[[DEComparison], float | dict[str, float]]
+METRIC_FUNC_COMBINED = Callable[..., float | dict[str, float]]
 
 METRIC_FUNC = (
     METRIC_FUNC_ADATA
     | METRIC_FUNC_DE
     | METRIC_FUNC_DE_KWARGS
     | METRIC_FUNC_ADATA_KWARGS
+    | METRIC_FUNC_COMBINED
 )
 
 
@@ -97,7 +105,7 @@ class MetricRegistry:
     def compute(
         self,
         name: str,
-        data: PerturbationAnndataPair | DEComparison,
+        data: PerturbationAnndataPair | DEComparison | CombinedMetricData,
         kwargs: dict[str, Any] | None = None,
     ) -> float | dict[str, float]:
         """

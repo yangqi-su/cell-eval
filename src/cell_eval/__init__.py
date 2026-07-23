@@ -5,6 +5,7 @@ from ._score import score_agg_metrics
 from ._types import (
     BulkArrays,
     CellArrays,
+    CombinedMetricData,
     DEComparison,
     DEResults,
     DESortBy,
@@ -29,6 +30,7 @@ __all__ = [
     "PerturbationAnndataPair",
     "BulkArrays",
     "CellArrays",
+    "CombinedMetricData",
     "initialize_de_comparison",
     # Pipeline
     "MetricPipeline",

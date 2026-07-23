@@ -81,6 +81,27 @@ evaluator = MetricsEvaluator(
 
 This will give you metric evaluations for each perturbation individually (`results`) and aggregated results over all perturbations (`agg_results`).
 
+The `full` profile includes two DEG-weighted expression metrics:
+
+- `wmse`: weighted MSE between predicted and real perturbation pseudobulks.
+- `weighted_pearson_delta`: weighted Pearson correlation between predicted and real perturbation-minus-control effects.
+
+Weights are derived only from the real perturbation-versus-control DE results. By default,
+two-sided DE p-values are converted to absolute normal-equivalent scores, then transformed
+per perturbation using min-max scaling, squaring, and sum normalization. Python callers can
+instead weight by absolute log2 fold change:
+
+```python
+results, agg_results = evaluator.compute(
+    metric_configs={
+        "wmse": {"weight_source": "abs_log2_fold_change"},
+        "weighted_pearson_delta": {
+            "weight_source": "abs_log2_fold_change"
+        },
+    }
+)
+```
+
 #### Data ceiling
 
 To estimate the *maximum* achievable score on each metric given the noise inherent in the real
